@@ -41,58 +41,62 @@ public class ServerMain extends SpringBootServletInitializer implements CommandL
 
     @Override
     public void run(String... args) throws Exception {
-//        ExecutorService executorService = Executors.newSingleThreadExecutor();
-//        executorService.execute(() -> {
-//            List<String> resultList = new ArrayList<>();
-//
-//            for (int i = 0; i < 100; i++) {
-//
-//                List<String> bidBigger = analyMarketDeepSerivce.getBidBigger();
-//                resultList.addAll(bidBigger);
-//                System.out.println("获取中...");
-//                try {
-//                    Thread.sleep(5000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            Map<String, Long> map = resultList.stream()
-//                    .collect(Collectors.groupingBy(p -> p, Collectors.counting()));
-//
-//            Map<String, Long> finalMap = new LinkedHashMap<>();
-//
-//            map.entrySet().stream()
-//                    .sorted(Map.Entry.<String, Long>comparingByValue()
-//                            .reversed()).forEachOrdered(e -> finalMap.put(e.getKey(), e.getValue()));
-//
-//
-//            if (CollectionUtils.isEmpty(map)) {
-//                logger.info("此次没有结果，，，，");
-//            }
-//
-//            for (Map.Entry<String, Long> entry : map.entrySet()) {
-//                String pair = entry.getKey();
-//                Long count = entry.getValue();
-//
-//
-//                Ticker ticker = HttpUtil.getTicker(pair);
-//                Double last = ticker.getLast();
-//                Double quotoVolume = ticker.getQuoteVolume();
-//
-//                if (last * quotoVolume < 20d * 10000) {
-//                    continue;
-//                }
-//
-//                logger.info("pair-[{}], 流通量-[{}$],排名:[{}]", pair, last * quotoVolume, count);
-//                if (count < 10) {
-//                    // todo 记录到数据库
-//                }
-//
-//
-//            }
-//
-//
-//        });
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(() -> {
+            List<String> resultList = new ArrayList<>();
+
+            for (int i = 0; i < 100; i++) {
+
+                List<String> bidBigger = analyMarketDeepSerivce.getBidBigger();
+                resultList.addAll(bidBigger);
+                System.out.println("获取中...");
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Map<String, Long> map = resultList.stream()
+                    .collect(Collectors.groupingBy(p -> p, Collectors.counting()));
+
+            Map<String, Long> finalMap = new LinkedHashMap<>();
+
+            map.entrySet().stream()
+                    .sorted(Map.Entry.<String, Long>comparingByValue()
+                            .reversed()).forEachOrdered(e -> finalMap.put(e.getKey(), e.getValue()));
+
+
+            if (CollectionUtils.isEmpty(map)) {
+                logger.info("此次没有结果，，，，");
+            }
+
+            for (Map.Entry<String, Long> entry : map.entrySet()) {
+                String pair = entry.getKey();
+                Long count = entry.getValue();
+
+
+                Ticker ticker = HttpUtil.getTicker(pair);
+                if (ticker == null) {
+                    logger.error("{}'s ticker is null", pair);
+                    continue;
+                }
+                Double last = ticker.getLast();
+                Double quotoVolume = ticker.getQuoteVolume();
+
+                if (last * quotoVolume < 20d * 10000) {
+                    continue;
+                }
+
+                logger.info("pair-[{}], 流通量-[{}$],排名:[{}]", pair, last * quotoVolume, count);
+                if (count < 10) {
+                    // todo 记录到数据库
+                }
+
+
+            }
+
+
+        });
     }
 }
