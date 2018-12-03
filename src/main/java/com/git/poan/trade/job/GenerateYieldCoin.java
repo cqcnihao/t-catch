@@ -1,6 +1,9 @@
 package com.git.poan.trade.job;
 
+import com.alibaba.fastjson.JSON;
+import com.git.poan.trade.bean.CoinPrice;
 import com.git.poan.trade.bean.Ticker;
+import com.git.poan.trade.bean.YieldCoinDataDTO;
 import com.git.poan.trade.entity.YieldCoin;
 import com.git.poan.trade.mapper.YieldCoinMapper;
 import com.git.poan.trade.service.AnalyMarketDeepSerivce;
@@ -15,10 +18,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -99,6 +99,17 @@ public class GenerateYieldCoin {
                     YieldCoin yieldCoin = new YieldCoin();
                     yieldCoin.setCoin(pair);
                     yieldCoin.setStatus(1);
+                    Date time = new Date();
+                    yieldCoin.setCreateTime(time);
+                    yieldCoin.setUpdateTime(time);
+
+                    YieldCoinDataDTO yieldCoinDataDTO = new YieldCoinDataDTO();
+                    CoinPrice coinPrice = new CoinPrice();
+                    coinPrice.setDate(time);
+                    coinPrice.setPrice(last);
+                    yieldCoinDataDTO.setCoinPrices(Collections.singletonList(coinPrice));
+
+                    yieldCoin.setData(JSON.toJSONString(yieldCoinDataDTO));
                     yieldCoinMapper.insert(yieldCoin);
                 }
 
