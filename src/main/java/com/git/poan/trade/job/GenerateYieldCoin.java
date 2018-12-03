@@ -42,9 +42,30 @@ public class GenerateYieldCoin {
     @Autowired
     private YieldCoinMapper yieldCoinMapper;
 
-    //每1分钟执行一次
+
     @Scheduled(cron = "0 */15 *  * * * ")
-    public void reportCurrentByCron(){
+    public void report(){
+        List<CoinPrice> coinPrices;
+        List<YieldCoin> yieldCoins = yieldCoinMapper.selectAll();
+        for (YieldCoin yieldCoin : yieldCoins) {
+            String coin = yieldCoin.getCoin();
+
+            Ticker ticker = HttpUtil.getTicker(coin);
+            Double lastPrice = ticker.getLast();
+
+            coinPrices = JSON.parseArray(yieldCoin.getData(), CoinPrice.class);
+            CoinPrice coinPrice = new CoinPrice();
+            coinPrice.setPrice(lastPrice);
+            coinPrice.setDate(new Date());
+            coinPrices.add(coinPrice);
+
+            yieldCoin.setData(JSON.toJSONString(coinPrices));
+            yieldCoinMapper.updateByPrimaryKey(yieldCoin);
+        }
+    }
+    //每15分钟执行一次
+    @Scheduled(cron = "0 */15 *  * * * ")
+    public void generateYieldCoin(){
 
         ExecutorService pool = ThreadPool.getPool();
         pool.execute(() -> {
@@ -94,6 +115,13 @@ public class GenerateYieldCoin {
 //                }
 
                 logger.info("pair-[{}], 流通量-[{}$],排名:[{}]", pair, last * quotoVolume, count);
+
+                List<YieldCoin> yieldCoins = yieldCoinMapper.selectAll();
+                List<String> paris = yieldCoins.stream().map(YieldCoin::getCoin).collect(Collectors.toList());
+                if (paris.contains(pair)) {
+                    continue;
+                }
+
                 if (count < 10) {
                     // todo 记录到数据库
                     YieldCoin yieldCoin = new YieldCoin();
@@ -103,13 +131,10 @@ public class GenerateYieldCoin {
                     yieldCoin.setCreateTime(time);
                     yieldCoin.setUpdateTime(time);
 
-                    YieldCoinDataDTO yieldCoinDataDTO = new YieldCoinDataDTO();
                     CoinPrice coinPrice = new CoinPrice();
                     coinPrice.setDate(time);
                     coinPrice.setPrice(last);
-                    yieldCoinDataDTO.setCoinPrices(Collections.singletonList(coinPrice));
-
-                    yieldCoin.setData(JSON.toJSONString(yieldCoinDataDTO));
+                    yieldCoin.setData(JSON.toJSONString(Collections.singleton(coinPrice)));
                     yieldCoinMapper.insert(yieldCoin);
                 }
 
