@@ -124,7 +124,7 @@ public class GenerateYieldCoin {
                     continue;
                 }
 
-                if (count < 10) {
+                if (count < 5) {
                     // todo 记录到数据库
                     YieldCoin yieldCoin = new YieldCoin();
                     yieldCoin.setCoin(pair);
