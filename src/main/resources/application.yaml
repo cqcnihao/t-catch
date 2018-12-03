@@ -1,5 +1,6 @@
-datasource:
-    url: jdbc:mysql://localhost:3306/gata_trade
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/gate_trade
     username: root
     password: admin
     driver-class-name: com.mysql.jdbc.Driver
@@ -7,11 +8,5 @@ datasource:
 
 
 mybatis:
-  mapper-locations: classpath:mapping/*.xml
+  mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.git.poan.trade.entity
-
-#pagehelper:
-#    helperDialect: mysql
-#    reasonable: true
-#    supportMethodsArguments: true
-#    params: count=countSql
