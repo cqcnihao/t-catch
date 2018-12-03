@@ -9,15 +9,15 @@ import java.util.Date;
  */
 public class CoinPrice{
 
-    private Date date;
+    private String date;
     private Double price;
 
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

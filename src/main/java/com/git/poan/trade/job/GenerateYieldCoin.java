@@ -18,6 +18,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -47,6 +48,7 @@ public class GenerateYieldCoin {
     public void report(){
         List<CoinPrice> coinPrices;
         List<YieldCoin> yieldCoins = yieldCoinMapper.selectAll();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
         for (YieldCoin yieldCoin : yieldCoins) {
             String coin = yieldCoin.getCoin();
 
@@ -56,7 +58,7 @@ public class GenerateYieldCoin {
             coinPrices = JSON.parseArray(yieldCoin.getData(), CoinPrice.class);
             CoinPrice coinPrice = new CoinPrice();
             coinPrice.setPrice(lastPrice);
-            coinPrice.setDate(new Date());
+            coinPrice.setDate(simpleDateFormat.format(new Date()));
             coinPrices.add(coinPrice);
 
             yieldCoin.setData(JSON.toJSONString(coinPrices));
@@ -66,7 +68,7 @@ public class GenerateYieldCoin {
     //每15分钟执行一次
     @Scheduled(cron = "0 */15 *  * * * ")
     public void generateYieldCoin(){
-
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
         ExecutorService pool = ThreadPool.getPool();
         pool.execute(() -> {
             List<String> resultList = new ArrayList<>();
@@ -132,7 +134,7 @@ public class GenerateYieldCoin {
                     yieldCoin.setUpdateTime(time);
 
                     CoinPrice coinPrice = new CoinPrice();
-                    coinPrice.setDate(time);
+                    coinPrice.setDate(simpleDateFormat.format(time));
                     coinPrice.setPrice(last);
                     yieldCoin.setData(JSON.toJSONString(Collections.singleton(coinPrice)));
                     yieldCoinMapper.insert(yieldCoin);
