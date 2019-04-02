@@ -10,16 +10,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
+@Deprecated
 public class AnalyMarketDeepSerivceImpl implements AnalyMarketDeepSerivce {
 
 
-    @Autowired
+    @Resource(name = "allPair")
     private List<String> allPair;
 
     @Autowired
