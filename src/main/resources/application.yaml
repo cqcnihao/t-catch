@@ -7,6 +7,6 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
 
 
-mybatis:
-  mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.git.poan.trade.entity
+#mybatis:
+#  mapper-locations: classpath:mapper/*.xml
+#  type-aliases-package: com.git.poan.trade.entity
