@@ -1,6 +1,5 @@
 package com.git.poan.trade.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.git.poan.trade.bean.SinglePairPOJO;
 import com.git.poan.trade.service.LogService;
 import com.git.poan.trade.util.HttpUtil;
@@ -8,12 +7,10 @@ import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -21,7 +18,6 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -32,6 +28,7 @@ import java.util.concurrent.Future;
  * @Description:
  */
 @Service
+@EnableScheduling
 public class LogServiceImpl implements LogService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
