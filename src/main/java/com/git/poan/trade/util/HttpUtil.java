@@ -59,7 +59,6 @@ public class HttpUtil {
     public static SinglePairPOJO getSinglePair(OkHttpClient client,String pair){
 
         pair = String.format(GateApi.SINGLE_PAIR.getUrl(), pair);
-        System.out.println(pair);
         Request request = new Request.Builder()
                 .url(pair)
                 .build();
