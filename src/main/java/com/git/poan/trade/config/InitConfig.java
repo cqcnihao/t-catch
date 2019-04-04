@@ -64,7 +64,7 @@ public class InitConfig {
 
     @Bean
     public ExecutorService threadPool(){
-        return Executors.newFixedThreadPool(20);
+        return Executors.newFixedThreadPool(50);
     }
 
 }

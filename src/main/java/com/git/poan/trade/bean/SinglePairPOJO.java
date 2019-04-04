@@ -1,15 +1,13 @@
 package com.git.poan.trade.bean;
 
+import lombok.Data;
 
+@Data
 public class SinglePairPOJO {
 
     private Double last;
 
-    public Double getLast() {
-        return last;
-    }
+    private transient String coinName;
 
-    public void setLast(Double last) {
-        this.last = last;
-    }
+
 }

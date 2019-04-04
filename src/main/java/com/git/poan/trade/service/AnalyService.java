@@ -6,4 +6,7 @@ package com.git.poan.trade.service;
  * @Description:
  */
 public interface AnalyService {
+
+    void listAll();
+
 }
