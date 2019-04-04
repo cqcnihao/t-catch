@@ -11,8 +11,11 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class HttpUtil {
@@ -30,7 +33,9 @@ public class HttpUtil {
     }
 
     private static class Client {
-        private static OkHttpClient client = new OkHttpClient();
+        private static OkHttpClient client = new OkHttpClient().newBuilder()
+                .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 62137)))
+                .connectTimeout(60,TimeUnit.SECONDS).build();
 
     }
 
@@ -53,7 +58,7 @@ public class HttpUtil {
 
     public static SinglePairPOJO getSinglePair(OkHttpClient client,String pair){
 
-        pair = String.format(GateApi.SINGLE_PAIR.getUrl(), pair, "usdt");
+        pair = String.format(GateApi.SINGLE_PAIR.getUrl(), pair);
         System.out.println(pair);
         Request request = new Request.Builder()
                 .url(pair)

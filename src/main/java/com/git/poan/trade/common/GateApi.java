@@ -8,7 +8,7 @@ public enum GateApi {
 
     TICKER("https://data.gateio.io/api2/1/ticker/"),
 
-    SINGLE_PAIR("https://data.gateio.io/api2/1/ticker/%s_%s"),
+    SINGLE_PAIR("https://data.gateio.io/api2/1/ticker/%s"),
 
     //
     ;

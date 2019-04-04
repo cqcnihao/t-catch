@@ -24,7 +24,7 @@ public class InitConfig {
             "LTC_USDT", "BCH_USDT", "ETC", "QTUM");
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Bean
+    @Bean(name = "allPair")
     public List<String> allPair() {
         Request request = new Request.Builder()
                 .url(GateApi.ALL_PAIR.getUrl())
@@ -56,6 +56,7 @@ public class InitConfig {
                     .collect(Collectors.toList());
             return list;
         } catch (IOException e) {
+            logger.error(e.getMessage(),e);
             return null;
         }
     }
