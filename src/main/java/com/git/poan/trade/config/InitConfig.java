@@ -8,20 +8,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Configuration
 public class InitConfig {
-    private final List<String> exclude = Arrays.asList("BTC_USDT", "ETH_USDT",
-            "LTC_USDT", "BCH_USDT", "ETC", "QTUM");
+    private final List<String> exclude = Arrays.asList("ETC", "QTUM");
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Bean(name = "allPair")
