@@ -27,11 +27,10 @@ public class LogServiceImpl implements LogService {
         OkHttpClient singleClient = HttpUtil.getSingleClient();
         for (String pair : allPair) {
             SinglePairPOJO singlePair = HttpUtil.getSinglePair(singleClient, pair);
-            System.out.println(pair+":"+singlePair.getLast());
+            System.out.println(pair + ":" + singlePair.getLast());
+            // todo :insert redis
         }
 
-        //https://data.gateio.co/api2/1/ticker/usdt_cny
-        //https://data.gateio.co/api2/1/ticker/zsc_eth
     }
 
 
