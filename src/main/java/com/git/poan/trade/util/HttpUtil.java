@@ -34,7 +34,7 @@ public class HttpUtil {
 
     private static class Client {
         private static OkHttpClient client = new OkHttpClient().newBuilder()
-                .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 62137)))
+                .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 50328)))
                 .connectTimeout(60,TimeUnit.SECONDS).build();
 
     }

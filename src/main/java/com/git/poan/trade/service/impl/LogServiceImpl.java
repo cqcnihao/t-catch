@@ -45,6 +45,8 @@ public class LogServiceImpl implements LogService {
     @Autowired
     private ExecutorService executorService;
 
+    private final static int count_limit = 99;
+
 
     @Scheduled(cron = "0/7 * * * * ?")
     public void log() {
@@ -70,8 +72,19 @@ public class LogServiceImpl implements LogService {
                     if (StringUtils.isEmpty(coinName)) {
                         continue;
                     }
-                    listOperations.rightPush(coinName,singlePairPOJO.getLast());
-                    listOperations.trim(coinName,0,100);
+
+                    /**
+                     * 左push，则最新push的再第一个，即2为第一个；币价最新的排第一个
+                     * lpush list 0 1 2
+                     * 当最新的币价入队列时
+                     * lpush list 3
+                     * 将最老的币价除去
+                     * ltrim list 0 2
+                     *
+                     */
+
+                    listOperations.leftPush(coinName,singlePairPOJO.getLast());
+                    listOperations.trim(coinName,0,count_limit);
                 } catch (InterruptedException | ExecutionException e) {
                     continue;
                 }
