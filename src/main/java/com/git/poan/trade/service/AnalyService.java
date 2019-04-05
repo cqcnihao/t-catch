@@ -7,6 +7,6 @@ package com.git.poan.trade.service;
  */
 public interface AnalyService {
 
-    void listAll();
+    void tryBuy();
 
 }

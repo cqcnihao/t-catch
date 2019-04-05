@@ -9,6 +9,11 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.redis.core.StringRedisTemplate;
+
+import javax.annotation.Resource;
+
+import java.util.List;
 
 import static java.util.Map.Entry.comparingByValue;
 
@@ -20,6 +25,11 @@ public class ServerMain extends SpringBootServletInitializer implements CommandL
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Resource(name = "allPair")
+    private List<String> allPair;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
     public static void main(String[] args) {
         SpringApplication.run(ServerMain.class, args);
@@ -27,6 +37,8 @@ public class ServerMain extends SpringBootServletInitializer implements CommandL
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("initial...");
+        System.out.println("delete coin data...");
+
+        stringRedisTemplate.delete(allPair);
     }
 }

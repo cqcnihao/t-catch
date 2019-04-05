@@ -1,20 +1,24 @@
 package com.git.poan.trade.service.impl;
 
 import com.git.poan.trade.bean.SinglePairPOJO;
+import com.git.poan.trade.service.AnalyService;
 import com.git.poan.trade.service.LogService;
 import com.git.poan.trade.util.HttpUtil;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,15 +41,19 @@ public class LogServiceImpl implements LogService {
     private List<String> allPair;
 
     @Resource
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String,Object> redisTemplate;
 
     @Resource
     private ListOperations<String,Double> listOperations;
 
+
     @Autowired
     private ExecutorService executorService;
 
-    private final static int count_limit = 99;
+    private final static int count_limit = 49;
+
+
+
 
 
     @Scheduled(cron = "0/7 * * * * ?")
@@ -91,6 +99,8 @@ public class LogServiceImpl implements LogService {
             }
             return null;
         });
+
+
 
     }
 
