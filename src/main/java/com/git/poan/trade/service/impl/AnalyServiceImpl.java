@@ -77,31 +77,31 @@ public class AnalyServiceImpl implements AnalyService {
 
             int pump = 0;
             int change = 0;
-            if (change7 >= 0.012) { // 1%的涨幅？？？
+            if (change7 >= 0.0088) { // 1%的涨幅？？？
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
                 change=7;
                 pump++;
-            } else if (change14 >= 0.012) { //
+            } else if (change14 >= 0.0088) { //
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
                 change=14;
                 pump++;
-            } else if (change21 >= 0.012) {
+            } else if (change21 >= 0.0088) {
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
                 change=21;
                 pump++;
 
 
-            } else if (change28 >= 0.012) { //
+            } else if (change28 >= 0.0088) { //
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
                 change=28;
                 pump++;
 
-            } else if (change35 >= 0.012) {
+            } else if (change35 >= 0.0088) {
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
                 change=35;
                 pump++;
 
-            } else if (change63 >= 0.012) {
+            } else if (change63 >= 0.0088) {
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
                 change=63;
                 pump++;
