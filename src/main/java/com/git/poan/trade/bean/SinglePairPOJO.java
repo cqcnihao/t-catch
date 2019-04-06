@@ -9,5 +9,7 @@ public class SinglePairPOJO {
 
     private transient String coinName;
 
+    private Double quoteVolume;
+
 
 }
