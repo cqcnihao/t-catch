@@ -75,7 +75,7 @@ public class AnalyServiceImpl implements AnalyService {
             double change63 = (second35Ago - second63Ago) / second63Ago;
 
 
-            double expect = 0.0077;
+            double expect = 0.0068;
 
             int pump = 0;
             int change = 0;
