@@ -75,7 +75,7 @@ public class AnalyServiceImpl implements AnalyService {
             double change63 = (second35Ago - second63Ago) / second63Ago;
 
 
-            double expect = 0.007;
+            double expect = 0.0077;
 
             int pump = 0;
             int change = 0;
@@ -109,7 +109,7 @@ public class AnalyServiceImpl implements AnalyService {
                 pump++;
 
             }
-            if (pump >=2) {
+            if (pump >=3) {
                 buy(change,pair,nowPrice);
             }
 
