@@ -56,7 +56,7 @@ public class LogServiceImpl implements LogService {
 
 
 
-    @Scheduled(cron = "0/7 * * * * ?")
+    @Scheduled(cron = "0/10 * * * * ?")
     public void log() {
         OkHttpClient singleClient = HttpUtil.getSingleClient();
         List<Future<SinglePairPOJO>> futureList = new ArrayList<>(allPair.size());

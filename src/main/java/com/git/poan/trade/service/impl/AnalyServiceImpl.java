@@ -48,64 +48,57 @@ public class AnalyServiceImpl implements AnalyService {
 
         for (String pair : allPair) {
             List<Double> range = listOperations.range(pair, 0, -1);
-            if (range.size() <= 9) {
+            if (range.size() <= 6) {
                 return;
             }
             Double nowPrice = range.get(0);
 
-            Double second7Ago = range.get(1);
+            Double second10Ago = range.get(1);
 
-            Double second14Ago = range.get(2);
+            Double second20Ago = range.get(2);
 
-            Double second21Ago = range.get(3);
+            Double second30Ago = range.get(3);
 
-            Double second28Ago = range.get(4);
+            Double second40Ago = range.get(4);
 
 
-            Double second35Ago = range.get(5);
+            Double second50Ago = range.get(5);
 
-            Double second63Ago = range.get(9);
 
             // 等差数列即线性增长  [1.4,1.2,1,1,0.9,0.8]
-            double change7 = (nowPrice - second7Ago) / second7Ago;
-            double change14 = (second7Ago - second14Ago) / second14Ago;
-            double change21 = (second14Ago - second21Ago) / second21Ago;
-            double change28 = (second21Ago - second28Ago) / second28Ago;
-            double change35 = (second28Ago - second35Ago) / second35Ago;
-            double change63 = (second35Ago - second63Ago) / second63Ago;
+            double change10 = (nowPrice - second10Ago) / second10Ago;
+            double change20 = (second10Ago - second20Ago) / second20Ago;
+            double change30 = (second20Ago - second30Ago) / second30Ago;
+            double change40 = (second30Ago - second40Ago) / second40Ago;
+            double change50 = (second40Ago - second50Ago) / second50Ago;
 
 
-            double expect = 0.0068;
+            double expect = 0.008;
 
             int pump = 0;
             int change = 0;
-            if (change7 >= expect) { // 1%的涨幅？？？
+            if (change10 >= expect) { // 1%的涨幅？？？
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
                 change=7;
                 pump++;
-            }  if (change14 >= expect) { //
+            }  if (change20 >= expect) { //
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
                 change=14;
                 pump++;
-            }  if (change21 >= expect) {
+            }  if (change30 >= expect) {
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
                 change=21;
                 pump++;
 
 
-            }  if (change28 >= expect) { //
+            }  if (change40 >= expect) { //
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
                 change=28;
                 pump++;
 
-            }  if (change35 >= expect) {
+            }  if (change50 >= expect) {
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
                 change=35;
-                pump++;
-
-            }  if (change63 >= expect) {
-                // 记录该币种的名字，另起任务过后获取其10分钟后的价格
-                change=63;
                 pump++;
 
             }
