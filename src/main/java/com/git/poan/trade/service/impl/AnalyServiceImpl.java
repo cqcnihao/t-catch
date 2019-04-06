@@ -75,33 +75,35 @@ public class AnalyServiceImpl implements AnalyService {
             double change63 = (second35Ago - second63Ago) / second63Ago;
 
 
+            double expect = 0.007;
+
             int pump = 0;
             int change = 0;
-            if (change7 >= 0.0088) { // 1%的涨幅？？？
+            if (change7 >= expect) { // 1%的涨幅？？？
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
                 change=7;
                 pump++;
-            } else if (change14 >= 0.0088) { //
+            }  if (change14 >= expect) { //
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
                 change=14;
                 pump++;
-            } else if (change21 >= 0.0088) {
+            }  if (change21 >= expect) {
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
                 change=21;
                 pump++;
 
 
-            } else if (change28 >= 0.0088) { //
+            }  if (change28 >= expect) { //
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
                 change=28;
                 pump++;
 
-            } else if (change35 >= 0.0088) {
+            }  if (change35 >= expect) {
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
                 change=35;
                 pump++;
 
-            } else if (change63 >= 0.0088) {
+            }  if (change63 >= expect) {
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
                 change=63;
                 pump++;
