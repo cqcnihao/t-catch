@@ -66,38 +66,51 @@ public class AnalyServiceImpl implements AnalyService {
 
             Double second63Ago = range.get(9);
 
-            // 等差数列即线性增长
+            // 等差数列即线性增长  [1.4,1.2,1,1,0.9,0.8]
             double change7 = (nowPrice - second7Ago) / second7Ago;
-            double change14 = (nowPrice - second14Ago) / second14Ago;
-            double change21 = (nowPrice - second28Ago) / second28Ago;
-            double change28 = (nowPrice - second28Ago) / second28Ago;
-            double change35 = (nowPrice - second35Ago) / second35Ago;
-            double change63 = (nowPrice - second63Ago) / second63Ago;
+            double change14 = (second7Ago - second14Ago) / second14Ago;
+            double change21 = (second14Ago - second21Ago) / second21Ago;
+            double change28 = (second21Ago - second28Ago) / second28Ago;
+            double change35 = (second28Ago - second35Ago) / second35Ago;
+            double change63 = (second35Ago - second63Ago) / second63Ago;
 
-            if (change7 >= 0.02) { // 1%的涨幅？？？
-                // 记录该币种的名字，另起任务过后获取其10分钟后的价格
-                buy(7, pair, nowPrice);
-            } else if (change14 >= 0.025) { //
-                // 记录该币种的名字，另起任务过后获取其10分钟后的价格
-                buy(14, pair, nowPrice);
 
-            } else if (change21 >= 0.028) {
+            int pump = 0;
+            int change = 0;
+            if (change7 >= 0.012) { // 1%的涨幅？？？
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
-                buy(21, pair, nowPrice);
+                change=7;
+                pump++;
+            } else if (change14 >= 0.012) { //
+                // 记录该币种的名字，另起任务过后获取其10分钟后的价格
+                change=14;
+                pump++;
+            } else if (change21 >= 0.012) {
+                // 记录该币种的名字，另起任务过后获取其10分钟后的价格
+                change=21;
+                pump++;
 
-            } else if (change28 >= 0.032) { //
-                // 记录该币种的名字，另起任务过后获取其10分钟后的价格
-                buy(28, pair, nowPrice);
 
-            } else if (change35 >= 0.038) {
+            } else if (change28 >= 0.012) { //
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
-                buy(35, pair, nowPrice);
+                change=28;
+                pump++;
 
-            } else if (change63 >= 0.041) {
+            } else if (change35 >= 0.012) {
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
-                buy(63, pair, nowPrice);
+                change=35;
+                pump++;
+
+            } else if (change63 >= 0.012) {
+                // 记录该币种的名字，另起任务过后获取其10分钟后的价格
+                change=63;
+                pump++;
 
             }
+            if (pump >=2) {
+                buy(change,pair,nowPrice);
+            }
+
 
 
         }
@@ -118,8 +131,8 @@ public class AnalyServiceImpl implements AnalyService {
     /**
      * 每五分钟对，buy中的coin进行查询，并以此记录此时价格
      */
-//    @Scheduled(cron = "0 0/5 * * * ?")
-    @Scheduled(cron = "0/10 * * * * ?")
+    @Scheduled(cron = "0 0/5 * * * ?")
+//    @Scheduled(cron = "0/10 * * * * ?")
     public void log() {
 
         Set<String> coins = zSetOperations.range("buy", 0, 1);
