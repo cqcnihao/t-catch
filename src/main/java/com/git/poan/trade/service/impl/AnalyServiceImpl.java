@@ -46,10 +46,14 @@ public class AnalyServiceImpl implements AnalyService {
     @Scheduled(cron = "0/3 * * * * ?")
     public void tryBuy() {
 
+        int end = 20;
+        double pump = 0;
+        double expect = 0.018;
         for (String pair : allPair) {
             // 取前三十秒的数据
-            List<Double> range = listOperations.range(pair, 0, 10);
-            if (range.size() < 10) {
+
+            List<Double> range = listOperations.range(pair, 0, end);
+            if (range.size() < end) {
                 return;
             }
 
@@ -58,18 +62,15 @@ public class AnalyServiceImpl implements AnalyService {
             if (singlePair == null) {
                 continue;
             }
-            if (singlePair.getBaseVolume() * singlePair.getLast() <= 80*10000) {
+            if (singlePair.getBaseVolume() * singlePair.getLast() <= 90*10000) {
                 continue;
             }
 
-            double pump = 0;
-            double expect = 0.012;
+
 
             for (int i = 0; i < range.size() - 1; i++) {
                 double raise = (range.get(i) - range.get(i+1))/range.get(i+1);
-                if (raise >= 0) {
-                    pump += raise ;
-                }
+                pump += raise ;
             }
             if (pump >= expect) {
                 buy(pair, range.get(0));
