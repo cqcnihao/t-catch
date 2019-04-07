@@ -48,7 +48,7 @@ public class AnalyServiceImpl implements AnalyService {
 
         int end = 6;
         double pump = 0;
-        double expect = 0.024;
+        double noise = 0.008d;
         for (String pair : allPair) {
             // 取前三十秒的数据
 
@@ -70,10 +70,10 @@ public class AnalyServiceImpl implements AnalyService {
 
             for (int i = 0; i < range.size() - 1; i++) {
                 double raise = (range.get(i) - range.get(i+1))/range.get(i+1);
-                if (raise > 0) // 去噪音
-                    pump += raise ;
+                if (raise > noise) // 去噪音
+                    pump ++ ;
             }
-            if (pump >= expect) {
+            if (pump >= 3) {
                 buy(pair, range.get(0));
             }
 
