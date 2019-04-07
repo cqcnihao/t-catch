@@ -11,5 +11,7 @@ public class SinglePairPOJO {
 
     private Double quoteVolume;
 
+    private Double baseVolume;
+
 
 }

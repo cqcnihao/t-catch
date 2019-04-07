@@ -51,6 +51,16 @@ public class AnalyServiceImpl implements AnalyService {
             if (range.size() <= 6) {
                 return;
             }
+
+            // fixme 如果该币种的交易量过低 ，则不考虑（小盘不好跟）
+            SinglePairPOJO singlePair = HttpUtil.getSinglePair(HttpUtil.getSingleClient(), pair);
+            if (singlePair == null) {
+                continue;
+            }
+            if (singlePair.getBaseVolume() * singlePair.getLast() <= 80*10000) {
+                continue;
+            }
+
             Double nowPrice = range.get(0);
 
             Double second10Ago = range.get(1);
