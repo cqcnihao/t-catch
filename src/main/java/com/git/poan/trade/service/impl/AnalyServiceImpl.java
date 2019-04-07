@@ -43,12 +43,12 @@ public class AnalyServiceImpl implements AnalyService {
     /**
      * 每三秒分析一次
      */
-    @Scheduled(cron = "0/3 * * * * ?")
+    @Scheduled(cron = "0/10 * * * * ?")
     public void tryBuy() {
 
-        int end = 20;
+        int end = 10;
         double pump = 0;
-        double expect = 0.018;
+        double expect = 0.008;
         for (String pair : allPair) {
             // 取前三十秒的数据
 
