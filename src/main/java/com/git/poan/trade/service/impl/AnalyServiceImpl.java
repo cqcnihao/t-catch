@@ -43,7 +43,7 @@ public class AnalyServiceImpl implements AnalyService {
     /**
      * 每三秒分析一次
      */
-    @Scheduled(cron = "0/10 * * * * ?")
+//    @Scheduled(cron = "0/10 * * * * ?")
     public void tryBuy() {
 
         int end = 6;
@@ -84,7 +84,7 @@ public class AnalyServiceImpl implements AnalyService {
     }
 
 
-//    @Scheduled(cron = "0/10 * * * * ?")
+    @Scheduled(cron = "0/10 * * * * ?")
     public void tryBuy10() {
 
         for (String pair : allPair) {
