@@ -41,10 +41,49 @@ public class AnalyServiceImpl implements AnalyService {
 
 
     /**
-     * 每五分钟对，buy中的coin进行查询，并以此记录此时价格
+     * 每三秒分析一次
      */
-    @Scheduled(cron = "0/8 * * * * ?")
+    @Scheduled(cron = "0/3 * * * * ?")
     public void tryBuy() {
+
+        for (String pair : allPair) {
+            // 取前三十秒的数据
+            List<Double> range = listOperations.range(pair, 0, 10);
+            if (range.size() < 10) {
+                return;
+            }
+
+            // fixme 如果该币种的交易量过低 ，则不考虑（小盘不好跟）
+            SinglePairPOJO singlePair = HttpUtil.getSinglePair(HttpUtil.getSingleClient(), pair);
+            if (singlePair == null) {
+                continue;
+            }
+            if (singlePair.getBaseVolume() * singlePair.getLast() <= 80*10000) {
+                continue;
+            }
+
+            double pump = 0;
+            double expect = 0.012;
+
+            for (int i = 0; i < range.size() - 1; i++) {
+                double raise = (range.get(i) - range.get(i+1))/range.get(i+1);
+                if (raise >= 0) {
+                    pump += raise ;
+                }
+            }
+            if (pump >= expect) {
+                buy(pair, range.get(0));
+            }
+
+
+
+        }
+
+    }
+
+
+//    @Scheduled(cron = "0/10 * * * * ?")
+    public void tryBuy10() {
 
         for (String pair : allPair) {
             List<Double> range = listOperations.range(pair, 0, -1);
@@ -113,7 +152,7 @@ public class AnalyServiceImpl implements AnalyService {
 
             }
             if (pump >=3) {
-                buy(change,pair,nowPrice);
+                buy(pair, nowPrice);
             }
 
 
@@ -123,8 +162,8 @@ public class AnalyServiceImpl implements AnalyService {
     }
 
 
-    private void buy(Integer change, String coin, Double price) {
-        logger.info("-----------buy-[{}] at price:[{}], pump in [{}] second", coin, price, change);
+    private void buy(String coin, Double price) {
+        logger.info("-----------buy-[{}] at price:[{}]", coin, price);
         ZSetOperations.TypedTuple<String> coinPrice = new DefaultTypedTuple<>(coin, price);
         Set<ZSetOperations.TypedTuple<String>> tuples = new HashSet<>();
         tuples.add(coinPrice);
