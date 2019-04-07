@@ -52,7 +52,7 @@ public class AnalyServiceImpl implements AnalyService {
         for (String pair : allPair) {
             // 取前三十秒的数据
 
-            List<Double> range = listOperations.range(pair, 0, end);
+            List<Double> range = listOperations.range(pair, 0, -1);
             if (range.size() < end) {
                 return;
             }
