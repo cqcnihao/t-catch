@@ -6,6 +6,7 @@ import com.git.poan.trade.service.AnalyService;
 import com.git.poan.trade.util.HttpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.DefaultTypedTuple;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -18,6 +19,7 @@ import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
 
 /**
  * @Author: panbenxing
@@ -40,49 +42,55 @@ public class AnalyServiceImpl implements AnalyService {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
+    @Autowired
+    private ExecutorService executorService;
+
     /**
      * 每三秒分析一次
      */
     @Scheduled(cron = "0/30 * * * * ?")
     public void tryBuy() {
 
-        double pump = 0;
-        double noise = 0.008d;
+        double noise = 0.0068d;
         int end = 6;
         for (String pair : allPair) {
             // 取前三十秒的数据
+//            executorService.execute(() -> {
+                double pump = 0;
 
-            List<Double> range = listOperations.range(pair, 0, end);
-            if (CollectionUtils.isEmpty(range) || range.size() <= end) {
-                return;
-            }
+                List<Double> range = listOperations.range(pair, 0, end);
+                if (CollectionUtils.isEmpty(range) || range.size() <= end) {
+                    return;
+                }
 
-            SinglePairPOJO singlePair = HttpUtil.getSinglePair(HttpUtil.getSingleClient(), pair);
-            // 币价高于1美元的 暂时不考虑
+                SinglePairPOJO singlePair = HttpUtil.getSinglePair(HttpUtil.getSingleClient(), pair);
+                // 币价高于1美元的 暂时不考虑
 
-            if (singlePair == null) {
-                continue;
-            }
+                if (singlePair == null) {
+                    return;
+                }
 
-            // fixme 如果该币种的交易量过低 ，则不考虑（小盘不好跟）
+                // fixme 如果该币种的交易量过低 ，则不考虑（小盘不好跟）
 //            if (singlePair.getBaseVolume() * singlePair.getLast() <= 90*10000) {
 //                continue;
 //            }
 
-            for (int i = 0; i < range.size() - 1; i++) {
-                double raise = (range.get(i) - range.get(i+1))/range.get(i+1);
-                // todo 放量上涨？
-                if (raise > noise) // 去噪音
-                    pump ++ ;
-            }
-            if (pump >= 4) {
-                buy(pair, range.get(0));
-            }
+                for (int i = 0; i < range.size() - 1; i++) {
+                    double raise = (range.get(i) - range.get(i + 1)) / range.get(i + 1);
+                    // todo 放量上涨？
+                    if (raise > noise) // 去噪音
+                        pump++;
+                }
+                if (pump >= 3) {
+                    buy(pair, range.get(0));
+                }
+//            });
+
         }
     }
 
 
-//    @Scheduled(cron = "0/10 * * * * ?")
+    //    @Scheduled(cron = "0/10 * * * * ?")
     public void tryBuy10() {
 
         for (String pair : allPair) {
@@ -96,7 +104,7 @@ public class AnalyServiceImpl implements AnalyService {
             if (singlePair == null) {
                 continue;
             }
-            if (singlePair.getBaseVolume() * singlePair.getLast() <= 80*10000) {
+            if (singlePair.getBaseVolume() * singlePair.getLast() <= 80 * 10000) {
                 continue;
             }
 //            if (singlePair.getPercentChange() >= 33) { // 涨幅太高的不跟
@@ -131,33 +139,36 @@ public class AnalyServiceImpl implements AnalyService {
             int change = 0;
             if (change10 >= expect) { // 1%的涨幅？？？
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
-                change=7;
+                change = 7;
                 pump++;
-            }  if (change20 >= expect) { //
+            }
+            if (change20 >= expect) { //
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
-                change=14;
+                change = 14;
                 pump++;
-            }  if (change30 >= expect) {
+            }
+            if (change30 >= expect) {
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
-                change=21;
-                pump++;
-
-
-            }  if (change40 >= expect) { //
-                // 记录该币种的名字，另起任务过后获取其10分钟后的价格
-                change=28;
+                change = 21;
                 pump++;
 
-            }  if (change50 >= expect) {
+
+            }
+            if (change40 >= expect) { //
                 // 记录该币种的名字，另起任务过后获取其10分钟后的价格
-                change=35;
+                change = 28;
                 pump++;
 
             }
-            if (pump >=3) {
+            if (change50 >= expect) {
+                // 记录该币种的名字，另起任务过后获取其10分钟后的价格
+                change = 35;
+                pump++;
+
+            }
+            if (pump >= 3) {
                 buy(pair, nowPrice);
             }
-
 
 
         }
