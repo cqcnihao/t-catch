@@ -13,5 +13,7 @@ public class SinglePairPOJO {
 
     private Double baseVolume;
 
+    private Double percentChange;
+
 
 }

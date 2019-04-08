@@ -16,7 +16,6 @@ import java.net.Proxy;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class HttpUtil {
 
@@ -34,7 +33,7 @@ public class HttpUtil {
 
     private static class Client {
         private static OkHttpClient client = new OkHttpClient().newBuilder()
-                .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 50328)))
+                .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 62137)))
                 .connectTimeout(60,TimeUnit.SECONDS).build();
 
     }

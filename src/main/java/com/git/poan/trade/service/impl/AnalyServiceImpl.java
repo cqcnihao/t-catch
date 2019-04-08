@@ -6,7 +6,6 @@ import com.git.poan.trade.service.AnalyService;
 import com.git.poan.trade.util.HttpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.DefaultTypedTuple;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -99,6 +98,9 @@ public class AnalyServiceImpl implements AnalyService {
                 continue;
             }
             if (singlePair.getBaseVolume() * singlePair.getLast() <= 80*10000) {
+                continue;
+            }
+            if (singlePair.getPercentChange() >= 33) { // 涨幅太高的不跟
                 continue;
             }
 
