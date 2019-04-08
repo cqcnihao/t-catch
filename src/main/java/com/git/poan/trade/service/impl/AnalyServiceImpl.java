@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.HashSet;
@@ -42,48 +43,43 @@ public class AnalyServiceImpl implements AnalyService {
     /**
      * 每三秒分析一次
      */
-//    @Scheduled(cron = "0/10 * * * * ?")
+    @Scheduled(cron = "0/30 * * * * ?")
     public void tryBuy() {
 
-        int end = 6;
         double pump = 0;
         double noise = 0.008d;
+        int end = 6;
         for (String pair : allPair) {
             // 取前三十秒的数据
 
             List<Double> range = listOperations.range(pair, 0, end);
-            if (range.size() < end) {
+            if (CollectionUtils.isEmpty(range) || range.size() <= end) {
                 return;
             }
 
-            // fixme 如果该币种的交易量过低 ，则不考虑（小盘不好跟）
             SinglePairPOJO singlePair = HttpUtil.getSinglePair(HttpUtil.getSingleClient(), pair);
             if (singlePair == null) {
                 continue;
             }
+            // fixme 如果该币种的交易量过低 ，则不考虑（小盘不好跟）
             if (singlePair.getBaseVolume() * singlePair.getLast() <= 90*10000) {
                 continue;
             }
 
-
-
             for (int i = 0; i < range.size() - 1; i++) {
                 double raise = (range.get(i) - range.get(i+1))/range.get(i+1);
+                // todo 放量上涨？
                 if (raise > noise) // 去噪音
                     pump ++ ;
             }
-            if (pump >= 3) {
+            if (pump >= 4) {
                 buy(pair, range.get(0));
             }
-
-
-
         }
-
     }
 
 
-    @Scheduled(cron = "0/10 * * * * ?")
+//    @Scheduled(cron = "0/10 * * * * ?")
     public void tryBuy10() {
 
         for (String pair : allPair) {
@@ -100,9 +96,9 @@ public class AnalyServiceImpl implements AnalyService {
             if (singlePair.getBaseVolume() * singlePair.getLast() <= 80*10000) {
                 continue;
             }
-            if (singlePair.getPercentChange() >= 33) { // 涨幅太高的不跟
-                continue;
-            }
+//            if (singlePair.getPercentChange() >= 33) { // 涨幅太高的不跟
+//                continue;
+//            }
 
             Double nowPrice = range.get(0);
 
