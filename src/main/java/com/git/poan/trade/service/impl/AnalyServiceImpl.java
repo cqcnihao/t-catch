@@ -58,9 +58,16 @@ public class AnalyServiceImpl implements AnalyService {
             }
 
             SinglePairPOJO singlePair = HttpUtil.getSinglePair(HttpUtil.getSingleClient(), pair);
+            // 币价高于1美元的 暂时不考虑
+
             if (singlePair == null) {
                 continue;
             }
+            if (singlePair.getLast() >= 1) {
+                continue;
+            }
+            // fixme : 如果
+
             // fixme 如果该币种的交易量过低 ，则不考虑（小盘不好跟）
             if (singlePair.getBaseVolume() * singlePair.getLast() <= 90*10000) {
                 continue;
