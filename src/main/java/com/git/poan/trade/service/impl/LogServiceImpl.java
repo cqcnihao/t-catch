@@ -1,24 +1,20 @@
 package com.git.poan.trade.service.impl;
 
 import com.git.poan.trade.bean.SinglePairPOJO;
-import com.git.poan.trade.service.AnalyService;
 import com.git.poan.trade.service.LogService;
 import com.git.poan.trade.util.HttpUtil;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +53,7 @@ public class LogServiceImpl implements LogService {
 
 //    @Scheduled(cron = "0/10 * * * * ?")
 
-    @Scheduled(cron = "0/10 * * * * ?")
+    @Scheduled(cron = "0/5 * * * * ?")
     public void log() {
         OkHttpClient singleClient = HttpUtil.getSingleClient();
         List<Future<SinglePairPOJO>> futureList = new ArrayList<>(allPair.size());

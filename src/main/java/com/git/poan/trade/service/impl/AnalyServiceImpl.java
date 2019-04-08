@@ -65,9 +65,9 @@ public class AnalyServiceImpl implements AnalyService {
             }
 
             // fixme 如果该币种的交易量过低 ，则不考虑（小盘不好跟）
-            if (singlePair.getBaseVolume() * singlePair.getLast() <= 90*10000) {
-                continue;
-            }
+//            if (singlePair.getBaseVolume() * singlePair.getLast() <= 90*10000) {
+//                continue;
+//            }
 
             for (int i = 0; i < range.size() - 1; i++) {
                 double raise = (range.get(i) - range.get(i+1))/range.get(i+1);
