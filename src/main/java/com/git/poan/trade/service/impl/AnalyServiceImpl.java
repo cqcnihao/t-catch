@@ -48,7 +48,7 @@ public class AnalyServiceImpl implements AnalyService {
     /**
      * 每三秒分析一次
      */
-    @Scheduled(cron = "0/30 * * * * ?")
+    @Scheduled(cron = "0/10 * * * * ?")
     public void tryBuy() {
 
         double noise = 0.0068d;
