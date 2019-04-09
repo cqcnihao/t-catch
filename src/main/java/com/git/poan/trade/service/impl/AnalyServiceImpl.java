@@ -51,7 +51,7 @@ public class AnalyServiceImpl implements AnalyService {
     @Scheduled(cron = "0/10 * * * * ?")
     public void tryBuy() {
 
-        double noise = 0.0068d;
+        double noise = 0.00333d;
         int end = 6;
         for (String pair : allPair) {
             // 取前三十秒的数据
